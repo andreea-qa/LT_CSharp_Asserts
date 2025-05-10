@@ -31,7 +31,7 @@ namespace NUnitAsserts
             builder.MoveToElement(driver.FindElement(By.XPath("//div[@class='carousel-item active']/img[@title='HTC Touch HD']")))
                    .Build().Perform();
 
-            // Waut for the product menu to be visible
+            // Wait for the product menu to be visible
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             IWebElement ComposeButton = wait.Until(ExpectedConditions.ElementExists(By.XPath("//button[span[text()='Add to Cart']]")));
 

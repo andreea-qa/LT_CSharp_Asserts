@@ -1,6 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using SetUp;
@@ -20,35 +18,22 @@ namespace MSTestAsserts
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void ValidateCorrectCategoryIsSelected()
         {
             // Navigate to the Components page
             driver.FindElement(By.XPath("//a[contains(normalize-space(.), 'Shop by Category')]")).Click();
-            driver.FindElement(By.XPath("//a[.//span[normalize-space(text())='Components']]")).Click();
+            driver.FindElement(By.XPath("//a[.//span[normalize-space(text())='Software']]")).Click();
 
-            // Hover the first HTC Touch product HD in the carousel
-            Actions builder = new Actions(driver);
-            builder.MoveToElement(driver.FindElement(By.XPath("//div[@class='carousel-item active']/img[@title='HTC Touch HD']")))
-                   .Build().Perform();
-
-            // Waut for the product menu to be visible
+            // Wait for the filter menu to be displayed
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            IWebElement ComposeButton = wait.Until(ExpectedConditions.ElementExists(By.XPath("//button[span[text()='Add to Cart']]")));
+            wait.Until(ExpectedConditions.ElementExists(By.Id("mz-filter-0")));
 
-            // Click Add to Cart button
-            driver.FindElement(By.XPath("//button[span[text()='Add to Cart']]")).Click();
-
-            // Wait for the notification message to be visible
-            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[contains(@class, 'toast') and @role='alert']")));
-
-            // Validate that the cart contains one item
-            string expectedText = driver.FindElement(By.XPath("//div[@class='cart-icon']/span")).Text;
-            Assert.IsTrue(expectedText.Equals("1"), "The cart was not updated.");
+            // Validate the title of the page is correct
+            Assert.IsTrue(driver.Title.Equals("Software"), "The page was not loaded.");         
 
             // Other ways to validate
-            Assert.AreEqual(expectedText, "1", "The cart was not updated.");
-            Assert.AreNotEqual(expectedText, "0", "The cart was not updated.");
-            Assert.IsFalse(expectedText.Equals("0"), "The cart was not updated.");
+            Assert.AreEqual("Software", driver.Title, "The page was not loaded.");
+            Assert.IsFalse(driver.Title == "0", "The page was not loaded.");
         }
 
         [TestCleanup]
