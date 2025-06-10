@@ -22,8 +22,7 @@ namespace SetUp
                 ["platformName"] = platform,
                 ["build"] = build,
                 ["project"] = project,
-                ["w3c"] = true,
-                ["plugin"] = "c#-mstest"
+                ["w3c"] = true
             };
 
             capabilities.AddAdditionalOption("LT:Options", ltOptions);

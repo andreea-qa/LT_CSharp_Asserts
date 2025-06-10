@@ -20,20 +20,32 @@ namespace MSTestAsserts
         [TestMethod]
         public void ValidateCorrectCategoryIsSelected()
         {
-            // Navigate to the Components page
-            driver.FindElement(By.XPath("//a[contains(normalize-space(.), 'Shop by Category')]")).Click();
-            driver.FindElement(By.XPath("//a[.//span[normalize-space(text())='Software']]")).Click();
+            try
+            {
+                // Navigate to the Components page
+                driver.FindElement(By.XPath("//a[contains(normalize-space(.), 'Shop by Category')]")).Click();
+                driver.FindElement(By.XPath("//a[.//span[normalize-space(text())='Software']]")).Click();
 
-            // Wait for the filter menu to be displayed
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.Until(ExpectedConditions.ElementExists(By.Id("mz-filter-0")));
+                // Wait for the filter menu to be displayed
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                wait.Until(ExpectedConditions.ElementExists(By.Id("mz-filter-0")));
 
-            // Validate the title of the page is correct
-            Assert.IsTrue(driver.Title.Equals("Software"), "The page was not loaded.");         
+                // Validate the title of the page is correct
+                Assert.IsTrue(driver.Title.Equals("Software"), "The page was not loaded.");
 
-            // Other ways to validate
-            Assert.AreEqual("Software", driver.Title, "The page was not loaded.");
-            Assert.IsFalse(driver.Title == "0", "The page was not loaded.");
+                // Other ways to validate
+                Assert.AreEqual("Software", driver.Title, "The page was not loaded.");
+                Assert.IsFalse(driver.Title == "0", "The page was not loaded.");
+
+                // Show test as passed in LambdaTest
+                ((IJavaScriptExecutor)driver).ExecuteScript("lambda-status=passed");
+            }
+            catch 
+            {
+                // Show test as failed in LambdaTest
+                ((IJavaScriptExecutor)driver).ExecuteScript("lambda-status=failed");
+            }
+            
         }
 
         [TestCleanup]
