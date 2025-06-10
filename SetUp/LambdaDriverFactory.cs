@@ -1,6 +1,9 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium.Safari;
 
 namespace SetUp
 {
@@ -10,10 +13,32 @@ namespace SetUp
         private static readonly string LT_USERNAME = Environment.GetEnvironmentVariable("LT_USERNAME");
         private static readonly string LT_ACCESS_KEY = Environment.GetEnvironmentVariable("LT_ACCESS_KEY");
 
-        public static IWebDriver CreateDriver(string platform = "Windows 10", string build = "Selenium CSharp", string project = "Default Project")
+        public static IWebDriver CreateDriver(
+            string browser = "Chrome",
+            string platform = "Windows 10",
+            string build = "Selenium CSharp",
+            string project = "Default Project")
         {
-            ChromeOptions capabilities = new ChromeOptions();
-            capabilities.BrowserVersion = "latest";
+            dynamic options;
+
+            switch (browser.ToLower())
+            {
+                case "firefox":
+                    options = new FirefoxOptions();
+                    break;
+                case "edge":
+                    options = new EdgeOptions();
+                    break;
+                case "safari":
+                    options = new SafariOptions();
+                    break;
+                case "chrome":
+                default:
+                    options = new ChromeOptions();
+                    break;
+            }
+
+            options.BrowserVersion = "latest";
 
             Dictionary<string, object> ltOptions = new Dictionary<string, object>
             {
@@ -25,9 +50,9 @@ namespace SetUp
                 ["w3c"] = true
             };
 
-            capabilities.AddAdditionalOption("LT:Options", ltOptions);
+            options.AddAdditionalOption("LT:Options", ltOptions);
 
-            return new RemoteWebDriver(new Uri($"https://{LT_USERNAME}:{LT_ACCESS_KEY}{gridURL}"), capabilities);
+            return new RemoteWebDriver(new Uri($"https://{LT_USERNAME}:{LT_ACCESS_KEY}{gridURL}"), options.ToCapabilities());
         }
     }
 }
