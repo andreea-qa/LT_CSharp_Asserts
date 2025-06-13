@@ -15,7 +15,7 @@ namespace NUnitAsserts
         public void OpenApplication()
         {
 
-            driver = LambdaDriverFactory.CreateDriver(project: "MSTest Asserts");
+            driver = LambdaDriverFactory.CreateDriver(project: "NUnit Asserts");
             driver.Navigate().GoToUrl("https://ecommerce-playground.lambdatest.io/");
         }
 
