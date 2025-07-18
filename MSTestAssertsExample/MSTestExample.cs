@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using SetUp;
 
 namespace MSTestAsserts
@@ -28,7 +27,7 @@ namespace MSTestAsserts
 
                 // Wait for the filter menu to be displayed
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                wait.Until(ExpectedConditions.ElementExists(By.Id("mz-filter-0")));
+                wait.Until(d => driver.FindElement(By.Id("mz-filter-0")));
 
                 // Validate the title of the page is correct
                 Assert.IsTrue(driver.Title.Equals("Software"), "The page was not loaded.");
@@ -44,8 +43,7 @@ namespace MSTestAsserts
             {
                 // Show test as failed in LambdaTest
                 ((IJavaScriptExecutor)driver).ExecuteScript("lambda-status=failed");
-            }
-            
+            }            
         }
 
         [TestCleanup]

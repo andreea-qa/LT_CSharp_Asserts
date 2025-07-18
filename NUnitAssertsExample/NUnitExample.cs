@@ -1,6 +1,4 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using SeleniumExtras.WaitHelpers;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using SetUp;
@@ -14,7 +12,6 @@ namespace NUnitAsserts
         [SetUp]
         public void OpenApplication()
         {
-
             driver = LambdaDriverFactory.CreateDriver(project: "NUnit Asserts");
             driver.Navigate().GoToUrl("https://ecommerce-playground.lambdatest.io/");
         }
@@ -34,14 +31,16 @@ namespace NUnitAsserts
                        .Build().Perform();
 
                 // Wait for the product menu to be visible
+                IWebElement composeButton = driver.FindElement(By.XPath("//button[span[text()='Add to Cart']]"));
                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-                IWebElement ComposeButton = wait.Until(ExpectedConditions.ElementExists(By.XPath("//button[span[text()='Add to Cart']]")));
+                wait.Until(d => composeButton.Displayed);
 
                 // Click Add to Cart button
-                driver.FindElement(By.XPath("//button[span[text()='Add to Cart']]")).Click();
+                composeButton.Click();
 
                 // Wait for the notification message to be visible
-                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//div[contains(@class, 'toast') and @role='alert']")));
+                IWebElement notificationMessage = driver.FindElement(By.XPath("//div[contains(@class, 'toast') and @role='alert']"));
+                wait.Until(d => notificationMessage.Displayed);
 
                 // Validate that the cart contains one item
                 string expectedText = driver.FindElement(By.XPath("//div[@class='cart-icon']/span")).Text;
@@ -61,8 +60,7 @@ namespace NUnitAsserts
             {
                 // Show test as failed in LambdaTest
                 ((IJavaScriptExecutor)driver).ExecuteScript("lambda-status=failed");
-            }
-            
+            }            
         }
 
         [TearDown]
